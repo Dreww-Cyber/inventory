@@ -10,7 +10,7 @@ import Papa from "papaparse";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import withAuth from "@/withAuth";
+import withAuth from "@/app/withAuth";
 
 const acceptableCsvFileTypes = ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel";
 
