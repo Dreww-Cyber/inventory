@@ -14,7 +14,6 @@ import withAuth from "@/app/withAuth";
 
 const acceptableCsvFileTypes = ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel";
 
-// Define the payload structure
 type Item = {
   name: string;
   initialLevel: number | null;
@@ -53,11 +52,11 @@ const AddProducts = () => {
   const [isCsvUploaded, setIsCsvUploaded] = useState(false);
   const [headers, setHeaders] = useState<string[]>(requiredCsvHeaders);
 
-  // State for general constraints
+
   const [totalMinimumOrder, setTotalMinimumOrder] = useState<number | null>(null);
   const [transportCapacity, setTransportCapacity] = useState<number | null>(null);
 
-  // State for manual input fields
+
   const [manualProduct, setManualProduct] = useState<Item>({
     name: "",
     initialLevel: null,
@@ -71,7 +70,6 @@ const AddProducts = () => {
     probabilityDistribution: null,
   });
 
-  // Handle file upload
   const onFileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       const file = e.target.files[0];
@@ -91,7 +89,7 @@ const AddProducts = () => {
               return;
             }
 
-            // Convert numeric fields to numbers
+
             const parsedData: Item[] = results.data.map((item) => ({
               name: item.name,
               initialLevel: Number(item.initialLevel),
@@ -106,7 +104,7 @@ const AddProducts = () => {
             }));
             setTableData(parsedData);
             setIsCsvUploaded(true);
-            setHeaders(csvHeaders); // Update headers based on CSV
+            setHeaders(csvHeaders); 
             toast({
               title: "Success",
               description: "CSV imported successfully",
@@ -124,7 +122,7 @@ const AddProducts = () => {
     }
   };
 
-  // Handle manual input change
+ 
   const handleManualInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Item) => {
     const value = e.target.value;
     setManualProduct({
@@ -133,9 +131,9 @@ const AddProducts = () => {
     });
   };
 
-  // Save manually added product
+
   const saveManualProduct = () => {
-    // Validate if all fields are filled
+ 
     if (Object.values(manualProduct).some((value) => value === "" || value === null)) {
       toast({
         title: "Error",
@@ -145,10 +143,10 @@ const AddProducts = () => {
       return;
     }
 
-    // Add the new product to the table data
+
     setTableData([...tableData, manualProduct]);
 
-    // Reset the form
+
     setManualProduct({
       name: "",
       initialLevel: null,
@@ -169,7 +167,7 @@ const AddProducts = () => {
     });
   };
 
-  // Save general constraints to local storage
+
   const saveGeneralConstraints = () => {
     if (totalMinimumOrder === null || transportCapacity === null) {
       toast({
@@ -188,7 +186,7 @@ const AddProducts = () => {
     });
   };
 
-  // Mutation to submit data to the endpoint
+ 
   const submitMutation = useMutation({
     mutationFn: async (payload: Payload) => {
       const response = await axios.post(
@@ -203,7 +201,7 @@ const AddProducts = () => {
         description: "Products submitted for analysis.",
         variant: "success",
       });
-      // Clear local storage after submission
+     
       localStorage.removeItem("totalMinimumOrder");
       localStorage.removeItem("transportCapacity");
       setTableData([]);
@@ -218,7 +216,7 @@ const AddProducts = () => {
     },
   });
 
-  // Handle submission of all data
+  
   const handleSubmit = () => {
     const payload: Payload = {
       totalMinimumOrder: Number(localStorage.getItem("totalMinimumOrder")) || 0,
@@ -228,7 +226,7 @@ const AddProducts = () => {
     submitMutation.mutate(payload);
   };
 
-  // Check if all fields are filled
+
   const isSubmitDisabled =
     tableData.length === 0 ||
     totalMinimumOrder === null ||

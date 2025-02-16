@@ -24,10 +24,10 @@ const ViewProduct = () => {
   const [isModalLoading, setIsModalLoading] = useState(false); 
   const { toast } = useToast();
 
-  // Fetch orders when the component mounts
+ 
   useEffect(() => {
     const fetchOrders = async () => {
-      const userId = localStorage.getItem("userId"); // Get userId from localStorage
+      const userId = localStorage.getItem("userId"); 
       if (!userId) {
         toast({
           title: "Error",
@@ -41,19 +41,19 @@ const ViewProduct = () => {
       try {
         const response = await axios.post(
           "https://ebuka-backend.onrender.com/product/all-products",
-          { userId } // Send userId in the payload
+          { userId } 
         );
 
-        // Check if the response has the expected structure
+       
         if (response.data && Array.isArray(response.data.data)) {
-          setOrders(response.data.data); // Set the orders
+          setOrders(response.data.data);
         } else {
           toast({
             title: "Error",
             description: "Invalid data format received from the server.",
             variant: "destructive",
           });
-          setOrders([]); // Set orders to an empty array to avoid errors
+          setOrders([]); 
         }
       } catch (error) {
         toast({
@@ -61,7 +61,7 @@ const ViewProduct = () => {
           description: "Failed to fetch orders.",
           variant: "destructive",
         });
-        setOrders([]); // Set orders to an empty array to avoid errors
+        setOrders([]);
       } finally {
         setIsLoading(false);
       }
@@ -70,11 +70,10 @@ const ViewProduct = () => {
     fetchOrders();
   }, [toast]);
 
-  // Handle product click
+  
   const handleProductClick = async (orderId: string) => {
-    setIsModalLoading(true); // Start loading for modal
-    setIsModalOpen(true); // Open the modal immediately
-
+    setIsModalLoading(true); 
+    setIsModalOpen(true); 
     try {
       const response = await axios.post(
         "https://ebuka-backend.onrender.com/product/single-product",
@@ -82,7 +81,7 @@ const ViewProduct = () => {
       );
 
       if (response.data) {
-        // Parse JSON strings in JprSuggestions
+       
         const parsedJprSuggestions = response.data.data.JprSuggestions.map(
           (suggestion: any) => {
             try {
@@ -104,13 +103,13 @@ const ViewProduct = () => {
           }
         );
 
-        // Update the response data with parsed suggestions
+        
         const updatedProduct = {
           ...response.data.data,
           JprSuggestions: parsedJprSuggestions,
         };
 
-        setSelectedProduct(updatedProduct); // Set the selected product
+        setSelectedProduct(updatedProduct); 
       } else {
         toast({
           title: "Error",
@@ -125,17 +124,17 @@ const ViewProduct = () => {
         variant: "destructive",
       });
     } finally {
-      setIsModalLoading(false); // Stop loading for modal
+      setIsModalLoading(false); 
     }
   };
 
-  // Close the modal
+  
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
 
-  // Dynamically extract table headers from the first item (if available)
+
   const headers =
     orders.length > 0 && orders[0].items.length > 0
       ? Object.keys(orders[0].items[0])
@@ -176,16 +175,16 @@ const ViewProduct = () => {
               {orders.map((order) =>
                 order.items.map((item: any) => (
                   <TableRow
-                    key={item.id} // Use item.id as the key
-                    onClick={() => handleProductClick(order.id)} // Pass order.id to handleProductClick
+                    key={item.id} 
+                    onClick={() => handleProductClick(order.id)} 
                     className="cursor-pointer hover:bg-gray-100 transition-colors"
                   >
                     {headers.map((header) => (
                       <TableCell key={header} className="py-3">
                         {item[header] === null || item[header] === undefined
-                          ? "N/A" // Handle null or undefined values
+                          ? "N/A" 
                           : typeof item[header] === "object"
-                          ? JSON.stringify(item[header]) // Handle objects
+                          ? JSON.stringify(item[header])
                           : item[header]}
                       </TableCell>
                     ))}
@@ -197,7 +196,6 @@ const ViewProduct = () => {
         )}
       </div>
 
-      {/* Modal for displaying product details */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
           <div className="bg-white p-6 rounded-lg w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto shadow-lg">
@@ -210,7 +208,7 @@ const ViewProduct = () => {
               </div>
             ) : selectedProduct ? (
               <div className="space-y-4">
-                {/* Display Items */}
+               
                 <div>
                   <h3 className="text-lg font-semibold text-gray-700 mb-2">Items</h3>
                   <div className="space-y-2">
@@ -231,21 +229,20 @@ const ViewProduct = () => {
                   </div>
                 </div>
 
-                {/* Display JPR Suggestions */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-700 mb-2">JPR Suggestions</h3>
                   <div className="space-y-2">
                     {selectedProduct.JprSuggestions.map((suggestion: any) => (
                       <div key={suggestion.id} className="bg-gray-50 p-4 rounded-lg">
-                        {/* Display non-object fields */}
+                       
                         {Object.entries(suggestion).map(([key, value]: any) => {
-                          // Skip fields that are already parsed into objects
+                          
                           if (
                             key === "optimalOrderQuantities" ||
                             key === "costBreakdown" ||
                             key === "orderStrategy"
                           ) {
-                            return null; // These will be handled separately
+                            return null;
                           }
                           return (
                             <div key={key} className="text-gray-700">
@@ -259,7 +256,7 @@ const ViewProduct = () => {
                           );
                         })}
 
-                        {/* Display parsed JSON objects */}
+                     
                         <div className="mt-2">
                           <strong className="capitalize">Optimal Order Quantities:</strong>
                           {Object.keys(suggestion.optimalOrderQuantities).length > 0 ? (
