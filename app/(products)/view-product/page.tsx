@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import withAuth from "../../../withAuth";
+import withAuth from "@/app/withAuth";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import {
@@ -14,14 +14,14 @@ import {
 } from "@/components/ui/table";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
-import { Skeleton } from "@/components/ui/skeleton"; // For loading states
+import { Skeleton } from "@/components/ui/skeleton"; 
 
 const ViewProduct = () => {
-  const [orders, setOrders] = useState<any[]>([]); // Store the orders
-  const [isLoading, setIsLoading] = useState(true); // Loading state for initial data fetch
-  const [selectedProduct, setSelectedProduct] = useState<any>(null); // Store the selected product
-  const [isModalOpen, setIsModalOpen] = useState(false); // Manage modal visibility
-  const [isModalLoading, setIsModalLoading] = useState(false); // Loading state for modal data fetch
+  const [orders, setOrders] = useState<any[]>([]); 
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalLoading, setIsModalLoading] = useState(false); 
   const { toast } = useToast();
 
   // Fetch orders when the component mounts
