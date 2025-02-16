@@ -1,7 +1,7 @@
 "use client"
 import { Eye, Plus, Upload, User } from "lucide-react";
 import Link from "next/link";
-import withAuth from "../withAuth"
+import withAuth from ".././withAuth"
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/ui/dialog";
